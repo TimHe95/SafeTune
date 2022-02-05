@@ -10,16 +10,16 @@ You can import this data into a database (`safetune.db`), and we provide several
 SELECT SUM(num) FROM (SELECT software, COUNT(DISTINCT name) AS num FROM configDocs WHERE software<>'spark' AND software<>'squid' AND software<>'postgresql' GROUP BY software);
 
 -- Expected result:
--- 7325
+-- 7349
 ```
 
 ### 2. All parameters after filtering
 
 ```sql
-SELECT count(DISTINCT name) FROM configDocs WHERE filter=0 AND software<>'spark' AND software<>'squid' AND software<>'postgresql';
+SELECT SUM(num) FROM (SELECT software, COUNT(DISTINCT name) AS num FROM configDocs WHERE software<>'spark' AND software<>'squid' AND software<>'postgresql' AND filter=0 GROUP BY software);
 
 -- Expected result:
--- 6254
+-- 6278
 ``` 
 
 ### 3. All parameters studied  
@@ -48,7 +48,7 @@ SELECT label, count(*) FROM (SELECT DISTINCT software, name, label FROM configDo
 SELECT label, count(*) FROM (SELECT DISTINCT software, name, label FROM configDocs WHERE software<>'spark' AND software<>'squid' AND software<>'postgresql') GROUP BY label;
 
 -- Reduced Functionality       676
--- Limited Side-effect         579
+-- Limited Side-effect         603
 -- Performance-unrelated       4853
 -- Lower Reliability           121
 -- Higher Cost                 512
